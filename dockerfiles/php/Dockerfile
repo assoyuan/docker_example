@@ -18,7 +18,7 @@ RUN pecl install grpc-1.22.1 \
 	&& pecl install swoole-4.4.4 \
 	&& docker-php-ext-enable grpc swoole
 
-# 如果扩展下载时间太长，可以先下载到本地，再copy到指定目录，再用pecl安装
+# 如果扩展下载时间太长或者网络原因，可以先下载到本地，再copy到指定目录，再用pecl安装
 COPY ./redis-4.0.1.tgz /home/redis.tgz
 COPY ./xdebug-2.6.0.tgz /home/xdebug.tgz
 RUN pecl install /home/redis.tgz \
