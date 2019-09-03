@@ -492,6 +492,49 @@ Dockerfile 和 docker-compose.yml配置好之后，执行
 
 也可以直接使用 `docker exec -it dev-php bash` 进入容器，再执行命令
 
+#### 2. 同步本地hosts，在docker中连接外网
+
+我本地项目需要连接google服务器，使用的代理需要添加本地hosts才可以请求，换成doker之后无法请求，解决办法如下：
+
+把本地hosts同步到docker中，在docker-compose.yml中的php service中，添加以下代码
+
+```
+extra_hosts:
+  - "googleads.googleapis.com: 172.217.160.74"
+  - "oauth2.googleapis.com: 216.58.200.234"
+```
+
+#### 3. Laravel框架 配置.dev文件连接docker容器
+
+`.dev`文件需要把对应的IP修改成容器的container_name
+
+```
+# before
+DB_HOST=127.0.0.1
+
+# after
+DB_HOST=dev-mysql
+```
+
+#### 4. docker for mac laravel请求响应慢
+
+可以在挂载目录后面加`:cached`解决，但会牺牲一致性
+
+```
+volumes:
+      - /project/path:/var/www/html:cached
+```
+
+加完之后性能还是比不上原生环境，这和mac中的文件系统有关系，不止mac，在windows也有同样的问题，需要等docker团队去解决
+
+参考自：
+
+> https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/
+
+> https://docs.docker.com/docker-for-mac/osxfs-caching/
+
+> https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076/158
+
 ### 参考链接
 
 > docker灵活的构建php环境
