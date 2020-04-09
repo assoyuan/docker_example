@@ -516,7 +516,21 @@ DB_HOST=127.0.0.1
 DB_HOST=dev-mysql
 ```
 
-#### 4. docker for mac laravel请求响应慢
+#### 4. Mysql修改初始密码之后，重新构建容器不生效
+
+删除mysql挂载的数据卷下的数据，再重新构建
+
+
+#### 5. 使用客户端连接Mysql容器
+
+```
+docker exec -it dev-mysql bash      # 进入到mysql容器
+mysql -u root -p                    # 连接mysql
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123456';      #修改root 可以通过任何客户端连接
+exit                                # 退出容器
+```
+
+#### 6. docker for mac Laravel请求响应慢
 
 可以在挂载目录后面加`:cached`解决，但会牺牲一致性
 
@@ -529,11 +543,9 @@ volumes:
 
 参考自：
 
-> https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/
-
-> https://docs.docker.com/docker-for-mac/osxfs-caching/
-
-> https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076/158
+* [文件系统共享](https://docs.docker.com/docker-for-mac/osxfs/)
+* [卷安装的性能调整（共享文件系统）](https://docs.docker.com/docker-for-mac/osxfs-caching/)
+* [Docker for Mac中的用户指导缓存](https://blog.docker.com/2017/05/user-guided-caching-in-docker-for-mac/)
 
 ### 参考链接
 
